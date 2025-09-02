@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ember Lu - Software Developer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">LOGO</div>
+        <nav>
+            <ul>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="Ember Lu - Resume.pdf" download="Ember Lu - Resume">Resume</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="particles-container">
+        <div class="particle-grid" id="particleGrid"></div>
+    </div>
+    
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="name">
+                    <span class="greeting">Hello, I'm</span>
+                    <span class="name-first">Ember</span>
+                </h1>
+                <p class="title"><span class="typing-text">software developer</span></p>
+                <div style="align-items: center;"><a href="#about" ><button class="cta-button">Meet Ember</button></a></div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <div class="profile-image">
+                        <img src="images/profile.jpg" alt="Ember Lu" onerror="this.style.display='none'">
+                    </div>
+                    <div class="about-text">
+                        <h2>About Me</h2>
+                        <p>
+                            Hello! I’m Ember, a second-year Computer Science student and researcher at UC Santa Cruz! 👋
+                        </p><br>
+                        <p>
+                            My background is in full stack development (<strong>React/Node.js, PostgreSQL, GraphQL, Sequelize</strong>), data science, and applied machine learning (<strong>PyTorch, R, Matlab, Numpy</strong>).
+                        </p><br>
+                        <p>
+                            I’m always actively learning in any way I can:
+                        </p>
+                        <ul>
+                            <li>🌐 Serving on the executive teams for Santa Cruz’s <strong>Google Developer Group</strong>, <strong>Santa Cruz AI</strong>, and <strong>Girls Who Code</strong></li>
+                            <li>✏️ Contributing to research across <strong>neural networks</strong>, <strong>computational ecology</strong>, <strong>health predictive analytics</strong>, <strong>cryptology</strong>, and <strong>molecular dynamics</strong></li>
+                        </ul>
+                        <p>
+                            I’m seeking a tech internship where I can apply my skills to real-world challenges, learn from industry professionals, and geek about tech! 💻 Let’s connect or chat!
+                        </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="experience-section">
+            <div class="container">
+                <h2>Experience & Education</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h3>Software Engineering Intern, PicnicHealth</h3>
+                            <span class="date">Jul. 2025 - Present</span>
+                            <ul>
+                                <li>Built 2 full-stack AI features (React, Node.js) accelerating clinical trial record workflows</li>
+                                <li>Integrated scalable APIs and UIs with REST controllers, real-time React/Apollo GraphQL components, Temporal
+                                    workflow endpoint calls, and PostgreSQL/Hasura data operations</li>
+                                <li>Pioneered groundwork for applying AI to streamline health tech research study operations within future projects</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h3>Software Engineering Intern, UCSC Biomedical AI Lab</h3>
+                            <span class="date">Jan. 2025 - Present</span>
+                            <ul>
+                                <li>Processed 150+ Hepatitis B capsid PDB files with MDTraj/MDAnalysis and scripted automated protein dimer
+                                    identification via center-of-mass proximity</li>
+                                <li>Simulated protein structures with OpenMM/ChimeraX to generate PDB data for ML model training within a
+                                    Linux server environment under Professor Razvan Marinescu</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h3>Machine Learning Researcher, UCSC Computational Ecology Lab</h3>
+                            <span class="date">Oct. 2024 - Jul. 2025</span>
+                            <ul>
+                                <li>Enhanced ML models (PyTorch, R) to predict species movement, analyzed fairness in algorithms, and led a
+                                    software team to boost model efficiency under Professor Luca de Alfaro</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h3>Executive Club Officer</h3>
+                            <span class="date">2024 - Present</span>
+                            <ul>
+                                <li>Director of Internal Affairs -- Google Developer Group</li>
+                                <li>Instruction and Outreach Lead -- Girls Who Code</li>
+                                <li>Marketing Officer -- Santa Cruz AI</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h3>Computer Science B.S. <br>University of California, Santa Cruz</h3>
+                            <span class="date">2024 - 2027</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="skills-section">
+            <div class="container">
+                <h2>Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/python.png"></div>
+                        <span>Python</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/typescript.png"></div>
+                        <span>TypeScript</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/java.png"></div>
+                        <span>Java</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/javascript.png"></div>
+                        <span>JavaScript</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/react.png"></div>
+                        <span>React</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/c.png"></div>
+                        <span>C/C++</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/html.png"></div>
+                        <span>HTML</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/css.png"></div>
+                        <span>CSS</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/r.png"></div>
+                        <span>R</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/node.png"></div>
+                        <span>Node.js</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/postgresql.png"></div>
+                        <span>PostgreSQL</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/git.png"></div>
+                        <span>Git</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/docker.png"></div>
+                        <span>Docker</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/flask.png"></div>
+                        <span>Flask</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="skill-icon"><img src="images/torch.png"></div>
+                        <span>PyTorch</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects-section">
+            <div class="container">
+              <h2>Projects</h2>
+          
+              <article class="project-row">
+                <div class="media">
+                  <img src="images/calmsense.png" alt="Project 1 screenshot">
+                </div>
+                <div class="info">
+                  <h3>CalmSense</h3>
+                  <ul>
+                    <li><p>Neural Network Prediction of Oncoming Anxiety Attacks using Health Device Data and UI for Anxiety Attack Breathing Patterns using the 4-7-8 Breathing Technique</p></li>
+                    <li><p>Won 3rd Place in the Santa Cruz Artificial Intelligence competition</p></li>
+                    <li><p>PyTorch, HTML/CSS - Jun. 2025</p></li>
+                  </ul>
+                </div>
+              </article>
+          
+              <article class="project-row">
+                <div class="media">
+                  <img src="images/paper.png" alt="Project 2 screenshot">
+                </div>
+                <div class="info">
+                  <h3>2x Machine Learning Papers</h3>
+                  <ul>
+                    <li><p>Led a research publication and a team of 4+ to build a RandomForestClassifier using data from 19 public health
+                        factors to determine COVID-19 risk levels by US county</p></li>
+                    <li><p>Directed a team of 4+ in statistical analysis of the encrypted Voynich Manuscript to decode its unknown language
+                        and co-wrote a pending research paper discussing its results</p></li>
+                    <li><p>Python, Matplotlib, Sci-kit Learn - 2020, 2022-2023</p></li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="project-row">
+                <div class="media">
+                  <img src="images/occasionall.png" alt="Project 2 screenshot">
+                </div>
+                <div class="info">
+                  <h3>OccasionAll</h3>
+                  <ul>
+                    <li><p>Developed Full-stack web app utilizes Flask, Gemini AI, and Spotify API to generate an enhanced Spotify playlist,
+                        customized to the user’s description of their event</p></li>
+                    <li><p>Flask, Gemini AI, Spotify API - Oct. 2024</p></li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </section>          
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3>Let's Connect!</h3>
+                <div class="contact-info">
+                    <a href="mailto:emberlu@gmail.com" class="email-link">
+                        <span class="email-icon">✉</span>
+                        emberlu@gmail.com
+                    </a>
+                    <a href="https://www.linkedin.com/ember-lu" class="email-link">
+                        LinkedIn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
