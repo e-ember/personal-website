@@ -24,7 +24,7 @@ html {
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #121211;
+    background-color: #010B13;
     color: #f0f0f0;
     line-height: 1.6;
 }
@@ -59,15 +59,14 @@ nav ul {
 nav a {
     color: #f0f0f0;
     text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     letter-spacing: 1px;
     transition: color 0.3s ease;
 }
 
 nav a:hover {
-    color: #ff8c00;
+    color: #FFB302;
 }
 
 /* Hero section styles */
@@ -275,8 +274,8 @@ nav a:hover {
 
 .cta-button {
     background-color: transparent;
-    color: #ff8c00;
-    border: 2px solid #ff8c00;
+    color: #FFB302;
+    border: 2px solid #FFB302;
     padding: 0.6rem 1.5rem;
     font-size: 0.9rem;
     font-weight: 500;
@@ -300,19 +299,19 @@ nav a:hover {
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 8px solid #ff8c00;
+    border-top: 8px solid #FFB302;
     transition: all 0.3s ease;
 }
 
 .cta-button:hover {
     background-color: rgba(255, 140, 0, 0.1);
-    color: #ff8c00;
+    color: #FFB302;
     transform: translateY(-2px);
     box-shadow: 0 0 25px rgba(255, 140, 0, 0.6);
 }
 
 .cta-button:hover::after {
-    border-top-color: #ff8c00;
+    border-top-color: #FFB302;
     transform: translateY(-50%) translateY(2px);
 }
 
@@ -383,7 +382,7 @@ section.visible {
 .about-text h2 {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
-    color: #ff8c00;
+    color: #FFB302;
     text-align: left;
 }
 
@@ -415,7 +414,7 @@ section.visible {
     top: 0.5rem;
     width: 8px;
     height: 8px;
-    background-color: #ff8c00;
+    background-color: #FFB302;
     border-radius: 50%;
 }
 
@@ -427,7 +426,7 @@ section.visible {
 .experience-section h2 {
     font-size: 2.5rem;
     margin-bottom: 4rem;
-    color: #f0f0f0;
+    color: #FFB302;
     text-align: center;
 }
 
@@ -444,7 +443,7 @@ section.visible {
     top: 0;
     bottom: 0;
     width: 4px;
-    background-color: #ff8c00;
+    background-color: #FFB302;
 }
 
 .timeline-item {
@@ -467,7 +466,7 @@ section.visible {
     top: 0;
     width: 12px;
     height: 12px;
-    background-color: #ff8c00;
+    background-color: #FFB302;
     border-radius: 50%;
     border: 3px solid #1a1a1a;
 }
@@ -482,7 +481,7 @@ section.visible {
 .timeline-content .date {
     display: block;
     font-size: 1rem;
-    color: #ff8c00;
+    color: #FFB302;
     margin-bottom: 1rem;
     font-weight: 500;
 }
@@ -520,7 +519,7 @@ section.visible {
 .skills-section h2 {
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    color: none;
+    color: #FFB302;
     text-align: center;
 }
 
@@ -539,7 +538,7 @@ section.visible {
     align-items: center;
     gap: 0.6rem;
     padding: 0.6rem 0.9rem;
-    background-color: #333;
+    background-color: #4b4b4b7e;
     border-radius: 7px;       /* pill look (optional) */
     transition: all 0.3s ease;
 }
@@ -550,7 +549,7 @@ section.visible {
 }
 
 .skill-tag:hover {
-    background-color: #ff8c00;
+    background-color: #FFB302;
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(255, 140, 0, 0.3);
 }
@@ -578,15 +577,30 @@ section.visible {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;                 /* base spacing */
-    margin: 2.5rem 0;
+    gap: 4rem;                 /* base spacing */
+    margin: 4rem 0;
     position: relative;        /* so z-index works nicely */
+    padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(245, 244, 242, 0.459);
+}
+
+.project-row:last-child {
+    border-bottom: none;
+    padding-bottom: 2rem;
 }
 
 .projects-section > .container > h2 {
     font-size: 2.5rem;
     text-align: center;
     margin: 0 0 3rem;
+    color: #FFB302;
+}
+
+.projects-section > .container > h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0 0 3rem;
+    color: #FFB302;
   }
 
 /* Light image card */
@@ -594,7 +608,7 @@ section.visible {
     flex: 1 1 560px; 
     width: auto;          /* grows a bit more than the info card */
     height: 400px;
-    background: #e5e5e5e8;
+    background: #c3c3c3e8;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(0,0,0,.25), 0 6px 10px rgba(0,0,0,.12);
@@ -618,7 +632,7 @@ section.visible {
 .info {
     flex: 0 1 600px;
     max-width: 550px;
-    background: #ff8c00;
+    background: #ffcc54eb;
     color: #111;
     border-radius: 12px;
     padding: 1.25rem 1.5rem;
@@ -812,7 +826,7 @@ main {
 
 .footer-content h3 {
     font-size: 1.2rem;
-    color: #ff8c00;
+    color: #FFB302;
     margin-bottom: 0.6rem;
     font-weight: 600;
 }
@@ -850,8 +864,8 @@ main {
 
 .email-link:hover {
     background-color: rgba(255, 140, 0, 0.1);
-    border-color: #ff8c00;
-    color: #ff8c00;
+    border-color: #FFB302;
+    color: #FFB302;
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
 }
@@ -904,12 +918,12 @@ main {
     }
 }
 
-
 /* Additional mobile responsive styles for projects */
 @media (max-width: 600px) {
     .project-row {
         margin: 1.5rem 0;
         gap: 1rem;
+        padding-bottom: 2rem;
     }
     
     .media {
