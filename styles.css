@@ -847,9 +847,10 @@ main {
 .contact-info {
     margin-bottom: 0.8rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
     align-items: center;
+    justify-content: center;
 }
 
 .email-link {
