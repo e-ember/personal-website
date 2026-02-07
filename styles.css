@@ -574,52 +574,61 @@ section.visible {
     font-weight: 500;
 }
 
+/* Projects section */
+.projects-section {
+    background-color: transparent;
+}
+
+.projects-section > .container > h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0 0 4rem;
+    color: #FFB302;
+}
+
 /* Row container */
 .project-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin: 5rem 0;
     align-items: center;
-    justify-content: center;
-    gap: 4rem;                 /* base spacing */
-    margin: 4rem 0;
-    position: relative;        /* so z-index works nicely */
-    padding-bottom: 4rem;
-    border-bottom: 1px solid rgba(245, 244, 242, 0.459);
+    position: relative;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 179, 2, 0.1);
+    transition: all 0.3s ease;
+}
+
+.project-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 179, 2, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .project-row:last-child {
-    border-bottom: none;
-    padding-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
-.projects-section > .container > h2 {
-    font-size: 2.5rem;
-    text-align: center;
-    margin: 0 0 3rem;
-    color: #FFB302;
-}
-
-.projects-section > .container > h2 {
-    font-size: 2.5rem;
-    text-align: center;
-    margin: 0 0 3rem;
-    color: #FFB302;
-  }
-
-/* Light image card */
+/* Image container */
 .media {
-    flex: 1 1 560px; 
-    width: auto;          /* grows a bit more than the info card */
-    height: 400px;
-    background: #c3c3c3e8;
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 10px 24px rgba(0,0,0,.25), 0 6px 10px rgba(0,0,0,.12);
-    z-index: 1;
-    padding: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
 }
 
-.media:hover {
-    box-shadow: #ffffffb0;
+.project-row:hover .media {
+    box-shadow: 0 12px 48px rgba(255, 179, 2, 0.2);
+    border-color: rgba(255, 179, 2, 0.3);
 }
 
 .media img {
@@ -627,79 +636,108 @@ section.visible {
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 7px;
+    transition: transform 0.3s ease;
 }
 
-/* Orange description card */
+.project-row:hover .media img {
+    transform: scale(1.05);
+}
+
+/* Zoom out the paper image specifically */
+.media.paper-image {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.media.paper-image img {
+    object-fit: contain;
+    object-position: center;
+}
+
+.project-row:hover .media.paper-image img {
+    transform: scale(1.02);
+}
+
+/* Description card */
 .info {
-    flex: 0 1 600px;
-    max-width: 550px;
-    background: #ffcc54eb;
-    color: #111;
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    box-shadow: 0 10px 24px rgba(0,0,0,.25), 0 6px 10px rgba(0,0,0,.12);
-    position: relative;
-    z-index: 2;
-    /* overlap: pull the orange card over the white card */
-    margin-left: -100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    color: #f0f0f0;
 }
 
 .info h3 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #FFB302;
+    letter-spacing: 0.5px;
 }
 
 .info ul {
-    padding-left: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .info li {
-    margin-left: 0.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.7;
+    color: #cccccc;
+    position: relative;
+    padding-left: 1.5rem;
 }
 
-/* Flip sides on even rows */
+.info li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #FFB302;
+    font-weight: bold;
+}
+
+.info li p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* Alternate layout for even rows */
 .project-row:nth-child(even) {
-    flex-direction: row-reverse;
+    grid-template-columns: 1fr 1fr;
 }
+
+.project-row:nth-child(even) .media {
+    order: 2;
+}
+
 .project-row:nth-child(even) .info {
-    margin-left: 0;
-    margin-right: -160px;      /* overlap the other way */
+    order: 1;
 }
 
-/* Hover polish (optional) */
-.project-row:hover .info { transform: translateY(-2px); transition: transform .2s ease; }
-
-/* Responsive: stack without overlap */
-@media (max-width: 800px) {
+/* Responsive: stack on smaller screens */
+@media (max-width: 968px) {
     .project-row {
-        flex-direction: column;
-        gap: 1.5rem;
-        margin: 2rem 0;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin: 3rem 0;
+        padding: 1.5rem;
     }
     
-    .info {
-        margin-left: 0;
-        margin-right: 0;
-        width: 100%;
-        max-width: none;
-        flex: none;
-    }
-    
-    .media { 
-        width: 100%; 
-        flex: none;
-        height: 300px;
-    }
-    
-    /* Remove the flip effect on mobile */
-    .project-row:nth-child(even) {
-        flex-direction: column;
+    .project-row:nth-child(even) .media {
+        order: 1;
     }
     
     .project-row:nth-child(even) .info {
-        margin-right: 0;
+        order: 2;
+    }
+    
+    .media {
+        min-height: 300px;
+    }
+    
+    .info {
+        padding: 1.5rem;
     }
 }
   
@@ -928,55 +966,62 @@ main {
 /* Additional mobile responsive styles for projects */
 @media (max-width: 600px) {
     .project-row {
-        margin: 1.5rem 0;
-        gap: 1rem;
-        padding-bottom: 2rem;
+        margin: 2rem 0;
+        gap: 1.5rem;
+        padding: 1.25rem;
     }
     
     .media {
-        height: 250px;
-        padding: 10px;
+        min-height: 250px;
     }
     
     .info {
-        padding: 1rem 1.2rem;
+        padding: 1.25rem;
     }
     
     .info h3 {
         font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .info li {
+        font-size: 0.9rem;
+        margin-bottom: 0.9rem;
     }
     
     .projects-section > .container > h2 {
         font-size: 2rem;
-        margin: 0 0 2rem;
+        margin: 0 0 2.5rem;
     }
 }
 
 @media (max-width: 480px) {
     .project-row {
-        margin: 1rem 0;
-        gap: 0.8rem;
+        margin: 1.5rem 0;
+        gap: 1.25rem;
+        padding: 1rem;
     }
     
     .media {
-        height: 200px;
-        padding: 8px;
+        min-height: 220px;
     }
     
     .info {
-        padding: 0.8rem 1rem;
+        padding: 1rem;
     }
     
     .info h3 {
         font-size: 1.3rem;
-    }
-    
-    .info ul {
-        padding-left: 1rem;
+        margin-bottom: 1rem;
     }
     
     .info li {
-        margin-left: 0.3rem;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+        padding-left: 1.25rem;
+    }
+    
+    .info li::before {
+        left: 0;
     }
 }
