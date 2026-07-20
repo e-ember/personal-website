@@ -294,8 +294,8 @@ function deleteText(element, speed = 50) {
 // Main typing animation loop
 async function startTypingAnimation() {
     const phrases = [
-        "software developer",
-        "machine learning researcher", 
+        "software engineer",
+        "applied AI researcher", 
         "Computer Science @ UC Santa Cruz"
     ];
     
