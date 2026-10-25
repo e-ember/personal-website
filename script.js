@@ -315,10 +315,10 @@ function handleScrollAnimations() {
         const itemTop = item.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
         
-        if (itemTop < windowHeight * 0.8) {
+        if (itemTop < windowHeight * 0.92) {
             setTimeout(() => {
                 item.classList.add('visible');
-            }, index * 200);
+            }, Math.min(index, 2) * 40);
         }
     });
     
