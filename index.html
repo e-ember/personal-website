@@ -7,7 +7,7 @@
     <title>Ember Lu | Software Engineer & ML Researcher</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="dark">
     <header>
         <div class="logo">Ember Lu</div>
         <nav>
@@ -19,6 +19,14 @@
                 <li><a href="Ember Lu - Resume.pdf" download="Ember Lu - Resume">Resume</a></li>
             </ul>
         </nav>
+        <button class="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="false" title="Switch to light mode">
+            <span class="theme-toggle-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+                </svg>
+            </span>
+        </button>
     </header>
 
     <div class="particles-container">
@@ -29,7 +37,7 @@
         <section class="hero">
             <div class="hero-content">
                 <h1 class="name">
-                    <span class="greeting">Hello, I'm</span>
+                    <span class="greeting">Hi, I'm</span>
                     <span class="name-first">Ember</span>
                 </h1>
                 <p class="title"><span class="typing-text">software engineer • applied AI researcher</span></p>
@@ -46,16 +54,7 @@
                     <div class="about-text">
                         <h2>About Me</h2>
                         <p>
-                            Hi! I'm Ember, a Computer Science student at UCSC, and here's what I'm up to!
-                        </p><br>
-                        <p>
-                            • Interning in the Industry: Developing multi-agent RAG pipelines for the Cloud team at Hewlett Packard Enterprise (HPE), engineered foundational full-stack AI features for clinical health trials at PicnicHealth (YC), and optimized open-source geospatial machine learning models at Overture Maps Foundation
-                        </p><br>
-                        <p>
-                            • Research: Contributing to autonomous vehicles research, with previous experience in neural networks, biomedical AI, & ML in computational ecology
-                        </p><br>
-                        <p>
-                            • On Campus: Creating opportunities for the Santa Cruz tech community as a Lead for Girls Who Code, Google Developer Group, Santa Cruz AI, and Hack.dev, where we hosted the NVIDIA x ASUS Hackathon with NEMOCLAW
+                            Hi! I'm Ember, a Computer Science major, 4x tech club lead at UCSC, Cloud Intern @ HPE, and 2x AI/ML researcher!
                         </p><br>
                         <p>
                             I'm currently seeking technical internship opportunities for Summer 2027!
@@ -183,7 +182,65 @@
                 </div>
             </div>
         </section>
+        <section id="projects" class="projects-section">
+            <div class="container">
+              <h2>Projects</h2>
 
+              <article class="project-row">
+                <div class="media">
+                  <img src="images/overture_project.png" alt="Project screenshot">
+                </div>
+                <div class="info">
+                  <h3>Global Leadership Board for LM Geodata Performance</h3>
+                  <span class="date">July 2026 – Present</span>
+                  <ul>
+                    <li><p>Building one of the first global leaderboards benchmarking small, scalable language models against standardized validation datasets for geospatial conflation, expanding into additional real-world domains.</p></li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="project-row">
+                <div class="media">
+                  <img src="images/syllabi_wrapped.jpg" alt="Syllabi Wrapped project screenshot">
+                </div>
+                <div class="info">
+                  <h3>Syllabi Wrapped | Node.js, SQLite, 1st Place @ HackDay</h3>
+                  <span class="date">Feb. 2026</span>
+                  <ul>
+                    <li><p>Built a full-stack web app that uses GPT to parse uploaded course syllabi into structured data, backed by a Node.js server and SQLite database, with a user interface twist.</p></li>
+                    <li><p>Designed a Spotify Wrapped-inspired swipe slideshow to present grade weighting, deadlines, and course policies; won 1st Place at CruzHacks Hack Day.</p></li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="project-row">
+                <div class="media">
+                  <img src="images/calmsense.png" alt="Project screenshot">
+                </div>
+                <div class="info">
+                  <h3>CalmSense | PyTorch, 3rd Place @ Santa Cruz AI Hackathon</h3>
+                  <span class="date">Jun. 2025</span>
+                  <ul>
+                    <li><p>Built a PyTorch neural network that analyzes real-time health data to predict oncoming anxiety attacks with 90% accuracy, with a web interface for guided breathing patterns to help alleviate symptoms.</p></li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="project-row">
+                <div class="media paper-image">
+                  <img src="images/paper.png" alt="Project screenshot">
+                </div>
+                <div class="info">
+                  <h3>Research Publications & ML Projects</h3>
+                  <ul>
+                    <li><p>Led a research team to build a RandomForestClassifier using data from 19 public health factors to determine COVID-19 risk levels by U.S. county.</p></li>
+                    <li><p>Directed a team of 4+ in statistical analysis of the encrypted Voynich Manuscript to decode its unknown language and co-wrote a pending research paper discussing its results.</p></li>
+                    <li><p>Python, Matplotlib, scikit-learn • 2020, 2022–2023</p></li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </section>
         <section id="skills" class="skills-section">
             <div class="container">
                 <h2>Skills</h2>
@@ -252,65 +309,6 @@
             </div>
         </section>
 
-        <section id="projects" class="projects-section">
-            <div class="container">
-              <h2>Projects</h2>
-          
-              <article class="project-row">
-                <div class="media">
-                  <img src="images/overture_project.png" alt="Project screenshot">
-                </div>
-                <div class="info">
-                  <h3>Global Leadership Board for LM Geodata Performance</h3>
-                  <span class="date">July 2026 – Present</span>
-                  <ul>
-                    <li><p>Building one of the first global leaderboards benchmarking small, scalable language models against standardized validation datasets for geospatial conflation, expanding into additional real-world domains.</p></li>
-                  </ul>
-                </div>
-              </article>
-
-              <article class="project-row">
-                <div class="media">
-                  <img src="images/syllabi_wrapped.jpg" alt="Syllabi Wrapped project screenshot">
-                </div>
-                <div class="info">
-                  <h3>Syllabi Wrapped | Node.js, SQLite, 1st Place @ HackDay</h3>
-                  <span class="date">Feb. 2026</span>
-                  <ul>
-                    <li><p>Built a full-stack web app that uses GPT to parse uploaded course syllabi into structured data, backed by a Node.js server and SQLite database, with a user interface twist.</p></li>
-                    <li><p>Designed a Spotify Wrapped-inspired swipe slideshow to present grade weighting, deadlines, and course policies; won 1st Place at CruzHacks Hack Day.</p></li>
-                  </ul>
-                </div>
-              </article>
-
-              <article class="project-row">
-                <div class="media">
-                  <img src="images/calmsense.png" alt="Project screenshot">
-                </div>
-                <div class="info">
-                  <h3>CalmSense | PyTorch, 3rd Place @ Santa Cruz AI Hackathon</h3>
-                  <span class="date">Jun. 2025</span>
-                  <ul>
-                    <li><p>Built a PyTorch neural network that analyzes real-time health data to predict oncoming anxiety attacks with 90% accuracy, with a web interface for guided breathing patterns to help alleviate symptoms.</p></li>
-                  </ul>
-                </div>
-              </article>
-
-              <article class="project-row">
-                <div class="media paper-image">
-                  <img src="images/paper.png" alt="Project screenshot">
-                </div>
-                <div class="info">
-                  <h3>Research Publications & ML Projects</h3>
-                  <ul>
-                    <li><p>Led a research team to build a RandomForestClassifier using data from 19 public health factors to determine COVID-19 risk levels by U.S. county.</p></li>
-                    <li><p>Directed a team of 4+ in statistical analysis of the encrypted Voynich Manuscript to decode its unknown language and co-wrote a pending research paper discussing its results.</p></li>
-                    <li><p>Python, Matplotlib, scikit-learn • 2020, 2022–2023</p></li>
-                  </ul>
-                </div>
-              </article>
-            </div>
-          </section>          
     </main>
 
     <!-- Footer -->

@@ -17,11 +17,11 @@ document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
 // Particle system for local mouse responsiveness
 function createParticles() {
     const particleGrid = document.getElementById('particleGrid');
-    const particleCount = 600; // Reduced for better performance with movement
+    const particleCount = 900;
     
     // Create a more structured, even distribution
-    const columns = 30; // 30 columns
-    const rows = 20;    // 20 rows
+    const columns = 36;
+    const rows = 24;
     let particleIndex = 0;
     
     for (let row = 0; row < rows; row++) {
@@ -69,8 +69,8 @@ function createParticles() {
             // Add movement properties
             particle.dataset.speedX = (Math.random() - 0.5) * 0.02; // Very slow horizontal movement
             particle.dataset.speedY = (Math.random() - 0.5) * 0.02; // Very slow vertical movement
-            particle.dataset.isOrange = Math.random() < 0.15; // 15% chance to be orange
-            particle.dataset.orangePhase = Math.random() * Math.PI * 2; // Random starting phase for orange fade
+            particle.dataset.isRed = Math.random() < 0.15; // 15% chance to be red
+            particle.dataset.redPhase = Math.random() * Math.PI * 2; // Random starting phase for red fade
             
             particleGrid.appendChild(particle);
             particleIndex++;
@@ -78,7 +78,7 @@ function createParticles() {
     }
     
     // Add some additional random particles for extra density
-    const extraParticles = 150;
+    const extraParticles = 200;
     for (let i = 0; i < extraParticles; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -101,8 +101,8 @@ function createParticles() {
         // Add movement properties
         particle.dataset.speedX = (Math.random() - 0.5) * 0.05; // Even slower for background particles
         particle.dataset.speedY = (Math.random() - 0.5) * 0.05;
-        particle.dataset.isOrange = Math.random() < 0.2; // 20% chance to be orange
-        particle.dataset.orangePhase = Math.random() * Math.PI * 2;
+        particle.dataset.isRed = Math.random() < 0.2; // 20% chance to be red
+        particle.dataset.redPhase = Math.random() * Math.PI * 2;
         
         particleGrid.appendChild(particle);
     }
@@ -111,50 +111,52 @@ function createParticles() {
     animateParticles();
 }
 
-// Animate particles with slow movement and orange fading
+// Animate particles with slow movement and red fading
+let particleFrame = 0;
+let particleList = null;
+
 function animateParticles() {
-    const particles = document.querySelectorAll('.particle');
-    const time = Date.now() * 0.001; // Current time in seconds
-    
-    particles.forEach(particle => {
-        // Get current position
-        let currentX = parseFloat(particle.style.left);
-        let currentY = parseFloat(particle.style.top);
-        
-        // Get movement speeds
-        const speedX = parseFloat(particle.dataset.speedX || 0);
-        const speedY = parseFloat(particle.dataset.speedY || 0);
-        
-        // Update position with very slow movement
-        currentX += speedX;
-        currentY += speedY;
-        
+    particleAnimationId = requestAnimationFrame(animateParticles);
+
+    // The drift is very slow, so update every 3rd frame (with 3x the step) to avoid constant layout work
+    particleFrame++;
+    if (particleFrame % 3 !== 0) return;
+
+    if (!particleList) {
+        particleList = Array.from(document.querySelectorAll('.particle'));
+        particleList.forEach(p => {
+            p._x = parseFloat(p.style.left);
+            p._y = parseFloat(p.style.top);
+            p._sx = parseFloat(p.dataset.speedX || 0) * 3;
+            p._sy = parseFloat(p.dataset.speedY || 0) * 3;
+            p._red = p.dataset.isRed === 'true';
+            p._phase = parseFloat(p.dataset.redPhase || 0);
+        });
+    }
+    const time = Date.now() * 0.001;
+
+    particleList.forEach(particle => {
+        let currentX = particle._x + particle._sx;
+        let currentY = particle._y + particle._sy;
+
         // Wrap around edges
         if (currentX < -5) currentX = 105;
         if (currentX > 105) currentX = -5;
         if (currentY < -5) currentY = 105;
         if (currentY > 105) currentY = -5;
-        
-        // Apply new position
+
+        particle._x = currentX;
+        particle._y = currentY;
         particle.style.left = currentX + '%';
         particle.style.top = currentY + '%';
-        
-        // Handle orange particles fading
-        if (particle.dataset.isOrange === 'true') {
-            const phase = parseFloat(particle.dataset.orangePhase || 0);
-            const fadeIntensity = Math.sin(time * 0.5 + phase) * 0.5 + 0.5; // Fade between 0 and 1
-            
-            // Create orange color with varying intensity
-            const orangeColor = `rgba(255, 140, 0, ${fadeIntensity * 0.6})`;
-            particle.style.backgroundColor = orangeColor;
-            
-            // Add subtle glow effect for orange particles
-            particle.style.boxShadow = `0 0 ${8 + fadeIntensity * 12}px rgba(255, 140, 0, ${fadeIntensity * 0.4})`;
+
+        // Red particles fade in and out, unless the mouse is currently affecting them
+        if (particle._red && !particle._active) {
+            const fadeIntensity = Math.sin(time * 0.5 + particle._phase) * 0.5 + 0.5;
+            particle.style.backgroundColor = `rgba(240, 90, 90, ${fadeIntensity * 0.3})`;
+            particle.style.boxShadow = `0 0 ${8 + fadeIntensity * 12}px rgba(240, 90, 90, ${fadeIntensity * 0.18})`;
         }
     });
-    
-    // Continue animation
-    particleAnimationId = requestAnimationFrame(animateParticles);
 }
 
 // Particle animation variables
@@ -164,83 +166,57 @@ let animationFrameId = null;
 let particleAnimationId = null;
 
 function updateParticles() {
-    const particles = document.querySelectorAll('.particle');
-    
-    particles.forEach(particle => {
-        const rect = particle.getBoundingClientRect();
-        const particleX = rect.left + rect.width / 2;
-        const particleY = rect.top + rect.height / 2;
-        
-        // Calculate distance from mouse to particle
-        const distance = Math.sqrt(
-            Math.pow(mouseX - particleX, 2) + 
-            Math.pow(mouseY - particleY, 2)
-        );
-        
-        // Effect radius (particles within 120px respond for better coverage)
-        const effectRadius = 120;
-        
+    if (!particleList) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const effectRadius = 120;
+
+    particleList.forEach(particle => {
+        // Position is computed from the cached percentages, avoiding a layout read per particle
+        const particleX = particle._x / 100 * vw;
+        const particleY = particle._y / 100 * vh;
+
+        const dx = particleX - mouseX;
+        const dy = particleY - mouseY;
+        if (Math.abs(dx) > effectRadius || Math.abs(dy) > effectRadius) {
+            if (particle._active) resetParticle(particle);
+            return;
+        }
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
         if (distance < effectRadius) {
-            // Calculate effect intensity based on proximity
             const intensity = 1 - (distance / effectRadius);
-            
-            // Add hovered class for fast transitions
+            particle._active = true;
             particle.classList.add('hovered');
-            
-            // Override orange particles with mouse interaction
-            if (particle.dataset.isOrange === 'true') {
-                particle.style.backgroundColor = `rgba(255, 140, 0, ${intensity * 0.8})`;
+
+            if (particle._red) {
+                particle.style.backgroundColor = `rgba(240, 90, 90, ${Math.min(intensity * 0.45 + 0.1, 0.55)})`;
             } else {
-                // Change color to orange based on proximity
-                const orangeIntensity = Math.min(intensity * 0.9, 0.9);
-                particle.style.backgroundColor = `rgba(255, 140, 0, ${orangeIntensity})`;
+                particle.style.backgroundColor = `rgba(240, 90, 90, ${Math.min(intensity * 0.5, 0.5)})`;
             }
-            
-            // Scale effect based on proximity
+
             const scale = 1 + (intensity * 0.8);
-            
-            // Calculate direction vector from mouse to particle
-            const dirX = particleX - mouseX;
-            const dirY = particleY - mouseY;
-            
-            // Normalize the direction vector
-            const length = Math.sqrt(dirX * dirX + dirY * dirY);
-            const normalizedDirX = dirX / length;
-            const normalizedDirY = dirY / length;
-            
-            // Move particle away from mouse (push effect)
+            const length = distance || 1;
             const pushDistance = intensity * 15; // Maximum 15px push
-            const translateX = normalizedDirX * pushDistance;
-            const translateY = normalizedDirY * pushDistance;
-            
+            const translateX = (dx / length) * pushDistance;
+            const translateY = (dy / length) * pushDistance;
+
             particle.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
-            
-            // Glow effect based on proximity
-            const glowIntensity = intensity * 0.7;
-            particle.style.boxShadow = `0 0 ${12 + intensity * 20}px rgba(255, 140, 0, ${glowIntensity})`;
-        } else {
-            // Remove hovered class for slow reset
-            particle.classList.remove('hovered');
-            
-            // Reset to original state, but preserve orange particles
-            if (particle.dataset.isOrange === 'true') {
-                // Let the orange particle animation continue
-                const time = Date.now() * 0.001;
-                const phase = parseFloat(particle.dataset.orangePhase || 0);
-                const fadeIntensity = Math.sin(time * 0.5 + phase) * 0.5 + 0.5;
-                const orangeColor = `rgba(255, 140, 0, ${fadeIntensity * 0.6})`;
-                particle.style.backgroundColor = orangeColor;
-                particle.style.boxShadow = `0 0 ${8 + fadeIntensity * 12}px rgba(255, 140, 0, ${fadeIntensity * 0.4})`;
-            } else {
-                // Reset non-orange particles
-                const originalColor = particle.dataset.originalColor || 'rgba(128, 128, 128, 0.3)';
-                particle.style.backgroundColor = originalColor;
-                particle.style.boxShadow = 'none';
-            }
-            
-            particle.style.transform = 'scale(1) translate(0px, 0px)';
+            particle.style.boxShadow = `0 0 ${12 + intensity * 20}px rgba(240, 90, 90, ${intensity * 0.3})`;
+        } else if (particle._active) {
+            resetParticle(particle);
         }
     });
+}
+
+function resetParticle(particle) {
+    particle._active = false;
+    particle.classList.remove('hovered');
+    if (!particle._red) {
+        particle.style.backgroundColor = particle.dataset.originalColor || 'rgba(128, 128, 128, 0.3)';
+        particle.style.boxShadow = 'none';
+    }
+    particle.style.transform = 'scale(1) translate(0px, 0px)';
 }
 
 // Throttled mouse tracking for better performance
@@ -371,38 +347,174 @@ function handleScrollAnimations() {
     });
 }
 
-// Particle fade effect based on scroll
-function handleParticleFade() {
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const particlesContainer = document.querySelector('.particles-container');
-    
-    if (particlesContainer) {
-        // Start fading particles when entering about section
-        const aboutSection = document.querySelector('#about');
-        if (aboutSection) {
-            const aboutTop = aboutSection.offsetTop;
-            const aboutHeight = aboutSection.offsetHeight;
-            
-            if (scrollY >= aboutTop - windowHeight) {
-                // Calculate fade based on position within about section
-                const fadeStart = aboutTop - windowHeight;
-                const fadeEnd = aboutTop + (aboutHeight * 0.3);
-                const opacity = Math.max(0, 1 - ((scrollY - fadeStart) / (fadeEnd - fadeStart)));
-                particlesContainer.style.opacity = opacity;
-            } else {
-                particlesContainer.style.opacity = 1;
+// Polaroids that "snap" into place beside the experience timeline
+const POLAROIDS = [
+    { side: 'left',  top: '2%',  dy: 0,   dx: 0,   rot: -7, src: 'images/hpe%20pres.png' },
+    { side: 'left',  top: '2%',  dy: 150, dx: 62,  rot: 5,  src: 'images/baskin.jpg' },
+    { side: 'right', top: '12%', dy: 0,   dx: 0,   rot: 6,  src: 'images/picnic_selfie.jpg' },
+    { side: 'left',  top: '36%', dy: 0,   dx: 0,   rot: 4,  src: 'images/avs.jpg' },
+    { side: 'right', top: '40%', dy: 0,   dx: 0,   rot: -5, src: 'images/paper.png' },
+    { side: 'right', top: '40%', dy: 160, dx: 70,  rot: 8,      src: 'images/rsac.jpg' },
+    { side: 'left',  top: '62%', dy: 0,   dx: 0,   rot: -6, src: 'images/gwc.jpg' },
+    { side: 'left',  top: '62%', dy: 160, dx: 70,  rot: 7,  src: 'images/gdgc.png' },
+    { side: 'right', top: '78%', dy: 0,   dx: 0,   rot: -4, src: 'images/scai%20group%202.jpg' },
+    { side: 'left',  top: '88%', dy: 0,   dx: 0,   rot: 5,  src: 'images/hackdev%20shirts.jpg' }
+];
+
+const HERO_POLAROIDS = [
+    { side: 'left',  rot: -6, src: 'images/talking.jpg' },
+    { side: 'right', rot: 5,  src: 'images/hackdev%20team.jpg' }
+];
+
+function initPolaroids() {
+    const timeline = document.querySelector('.timeline');
+    const hero = document.querySelector('.hero');
+    if (!timeline) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const polaroid = entry.target;
+            observer.unobserve(polaroid);
+
+            const reveal = () => polaroid.classList.add('pop');
+            if (reduceMotion || getComputedStyle(polaroid).display === 'none') {
+                reveal();
+                return;
             }
-        }
-    }
+
+            const container = polaroid.parentElement;
+            const isHero = container === hero;
+            const start = () => {
+                const label = document.createElement('span');
+                label.className = `snap-label ${polaroid.dataset.side}${isHero ? ' hero-snap' : ''}`;
+                label.textContent = 'snap!';
+                label.style.cssText = polaroid.style.cssText;
+                container.appendChild(label);
+
+                setTimeout(() => {
+                    label.remove();
+                    reveal();
+                }, 700);
+            };
+            setTimeout(start, isHero ? (polaroid.dataset.side === 'left' ? 400 : 900) : 0);
+        });
+    }, { rootMargin: '0px 0px -20% 0px' });
+
+    POLAROIDS.forEach(item => {
+        const polaroid = document.createElement('div');
+        polaroid.className = `polaroid ${item.side}`;
+        polaroid.dataset.side = item.side;
+        polaroid.style.cssText = `--top: ${item.top}; --dy: ${item.dy}px; --dx: ${item.dx}px; --rot: ${item.rot}deg;`;
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = '';
+        img.loading = 'lazy';
+        polaroid.appendChild(img);
+
+        timeline.appendChild(polaroid);
+        observer.observe(polaroid);
+    });
+
+    if (!hero) return;
+    HERO_POLAROIDS.forEach(item => {
+        const polaroid = document.createElement('div');
+        polaroid.className = `polaroid hero-polaroid ${item.side}`;
+        polaroid.dataset.side = item.side;
+        polaroid.style.cssText = `--rot: ${item.rot}deg;`;
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = '';
+        polaroid.appendChild(img);
+
+        hero.appendChild(polaroid);
+        observer.observe(polaroid);
+    });
+}
+
+// Rocket that zig-zags down the projects section as you scroll
+function initRocket() {
+    const section = document.querySelector('#projects');
+    if (!section) return;
+
+    const rocket = document.createElement('div');
+    rocket.className = 'rocket';
+    rocket.setAttribute('aria-hidden', 'true');
+    rocket.innerHTML = `
+        <svg viewBox="0 0 70 140">
+            <g class="rocket-cloud" fill="#f4f6fa">
+                <circle cx="35" cy="102" r="14"/>
+                <circle cx="20" cy="112" r="11"/>
+                <circle cx="50" cy="112" r="11"/>
+                <circle cx="35" cy="124" r="12"/>
+                <circle cx="26" cy="132" r="8"/>
+                <circle cx="44" cy="132" r="8"/>
+            </g>
+            <path d="M35 0 C52 16 54 46 50 78 L20 78 C16 46 18 16 35 0 Z" fill="#f4f6fa"/>
+            <path d="M20 58 L6 88 L22 80 Z M50 58 L64 88 L48 80 Z" fill="#f05a5a"/>
+            <path d="M35 0 C44 8 48 16 50 26 L20 26 C22 16 26 8 35 0 Z" fill="#f05a5a"/>
+            <circle cx="35" cy="46" r="8" fill="#2b3a55" stroke="#d94a4a" stroke-width="3"/>
+            <path d="M26 78 L44 78 L40 90 L30 90 Z" fill="#d94a4a"/>
+        </svg>`;
+    section.appendChild(rocket);
+
+    const swings = 5;
+    const position = (p) => {
+        const w = section.clientWidth;
+        const h = section.clientHeight;
+        const row = section.querySelector('.project-row');
+        const amp = row ? row.offsetWidth / 2 + 45 : Math.min(w * 0.42, 600);
+        const phase = p * swings * Math.PI;
+        return {
+            x: Math.min(w - 32, Math.max(0, w / 2 + amp * Math.sin(phase) - 16)),
+            y: p * h,
+            dx: amp * swings * Math.PI * Math.cos(phase),
+            dy: h
+        };
+    };
+
+    const update = () => {
+        const rect = section.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (window.innerHeight * 0.4 - rect.top) / rect.height));
+        const pos = position(p);
+        const angle = Math.atan2(pos.dx, -pos.dy) * 180 / Math.PI;
+        rocket.style.transform = `translate(${pos.x}px, ${pos.y - 32}px) rotate(${angle}deg)`;
+        rocket.style.opacity = rect.top < window.innerHeight && rect.bottom > 0 ? '1' : '0';
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
 }
 
 // Add some subtle animations on page load
 window.addEventListener('load', function() {
     const heroContent = document.querySelector('.hero-content');
+    const themeToggle = document.querySelector('.theme-toggle');
+
+    themeToggle.addEventListener('click', () => {
+        const isLight = document.body.dataset.theme !== 'light';
+        document.body.dataset.theme = isLight ? 'light' : 'dark';
+        themeToggle.setAttribute('aria-pressed', String(isLight));
+
+        const mode = isLight ? 'dark' : 'light';
+        themeToggle.setAttribute('aria-label', `Switch to ${mode} mode`);
+        themeToggle.title = `Switch to ${mode} mode`;
+        themeToggle.querySelector('.theme-toggle-icon').innerHTML = isLight
+            ? '<svg viewBox="0 0 24 24" focusable="false"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"></path></svg>'
+            : '<svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>';
+    });
+
     heroContent.style.opacity = '0';
     heroContent.style.transform = 'translateY(20px)';
     
+    initPolaroids();
+    initRocket();
+
     // Create particles
     createParticles();
     
@@ -427,7 +539,6 @@ window.addEventListener('load', function() {
     // Set up scroll event listeners
     window.addEventListener('scroll', () => {
         handleScrollAnimations();
-        handleParticleFade();
     });
     
     // Initial check for elements in view
