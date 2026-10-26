@@ -134,6 +134,7 @@ function animateParticles() {
         });
     }
     const time = Date.now() * 0.001;
+    updateBursts(time);
 
     particleList.forEach(particle => {
         let currentX = particle._x + particle._sx;
@@ -150,13 +151,66 @@ function animateParticles() {
         particle.style.left = currentX + '%';
         particle.style.top = currentY + '%';
 
+        if (particle._active) return;
+
         // Red particles fade in and out, unless the mouse is currently affecting them
-        if (particle._red && !particle._active) {
-            const fadeIntensity = Math.sin(time * 0.5 + particle._phase) * 0.5 + 0.5;
-            particle.style.backgroundColor = `rgba(240, 90, 90, ${fadeIntensity * 0.3})`;
+        const burst = particle._burst || 0;
+        if (particle._red) {
+            const fadeIntensity = Math.max(Math.sin(time * 0.5 + particle._phase) * 0.5 + 0.5, burst);
+            particle.style.backgroundColor = `rgba(240, 90, 90, ${Math.max(fadeIntensity * 0.3, burst * 0.6)})`;
             particle.style.boxShadow = `0 0 ${8 + fadeIntensity * 12}px rgba(240, 90, 90, ${fadeIntensity * 0.18})`;
+        } else if (burst > 0.01) {
+            particle._burstOn = true;
+            particle.style.backgroundColor = `rgba(240, 90, 90, ${burst * 0.6})`;
+            particle.style.boxShadow = `0 0 ${burst * 14}px rgba(240, 90, 90, ${burst * 0.25})`;
+        } else if (particle._burstOn) {
+            particle._burstOn = false;
+            particle.style.backgroundColor = particle.dataset.originalColor || 'rgba(128, 128, 128, 0.3)';
+            particle.style.boxShadow = 'none';
         }
     });
+}
+
+// Small circular bursts of reddish dots that swell in and fade back out
+const particleBursts = [];
+let nextBurstTime = 0;
+
+function updateBursts(time) {
+    if (time >= nextBurstTime && particleBursts.length < 3) {
+        particleBursts.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            radius: 90 + Math.random() * 90,
+            start: time,
+            duration: 3 + Math.random() * 2
+        });
+        nextBurstTime = time + 0.8 + Math.random() * 1.7;
+    }
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    particleList.forEach(p => { p._burst = 0; });
+
+    for (let i = particleBursts.length - 1; i >= 0; i--) {
+        const burst = particleBursts[i];
+        const t = (time - burst.start) / burst.duration;
+        if (t >= 1) {
+            particleBursts.splice(i, 1);
+            continue;
+        }
+        const envelope = Math.sin(t * Math.PI);
+        const radius = burst.radius * (0.4 + 0.6 * t);
+
+        particleList.forEach(p => {
+            const dx = p._x / 100 * vw - burst.x;
+            const dy = p._y / 100 * vh - burst.y;
+            if (Math.abs(dx) > radius || Math.abs(dy) > radius) return;
+            const d = Math.sqrt(dx * dx + dy * dy);
+            if (d >= radius) return;
+            const value = envelope * (1 - (d / radius) ** 2);
+            if (value > p._burst) p._burst = value;
+        });
+    }
 }
 
 // Particle animation variables
@@ -436,59 +490,77 @@ function initPolaroids() {
     });
 }
 
-// Rocket that zig-zags down the projects section as you scroll
-function initRocket() {
+function initProjectSlideshow() {
+    const slideshow = document.querySelector('.project-slideshow');
+    if (!slideshow) return;
+
+    const slides = Array.from(slideshow.querySelectorAll('.project-row'));
+    const previousButton = slideshow.querySelector('.project-previous');
+    const nextButton = slideshow.querySelector('.project-next');
+    const dotsContainer = slideshow.querySelector('.project-dots');
+    const counter = slideshow.querySelector('.project-counter');
+    let activeIndex = 0;
+
+    if (!slides.length || !previousButton || !nextButton || !dotsContainer || !counter) return;
+
+    const dots = slides.map((slide, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'project-dot';
+        dot.type = 'button';
+        dot.setAttribute('aria-label', `Show project ${index + 1}`);
+        dot.addEventListener('click', () => showSlide(index));
+        dotsContainer.appendChild(dot);
+        return dot;
+    });
+
+    function showSlide(index) {
+        activeIndex = (index + slides.length) % slides.length;
+        slides.forEach((slide, slideIndex) => {
+            const isActive = slideIndex === activeIndex;
+            slide.classList.toggle('is-active', isActive);
+            slide.classList.toggle('is-before', slideIndex < activeIndex);
+            slide.inert = !isActive;
+            slide.setAttribute('aria-label', `${slideIndex + 1} of ${slides.length}`);
+        });
+        dots.forEach((dot, dotIndex) => {
+            const isActive = dotIndex === activeIndex;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-current', String(isActive));
+        });
+        counter.textContent = `${activeIndex + 1} / ${slides.length}`;
+    }
+
+    previousButton.addEventListener('click', () => showSlide(activeIndex - 1));
+    nextButton.addEventListener('click', () => showSlide(activeIndex + 1));
+    slideshow.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            showSlide(activeIndex - 1);
+        } else if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            showSlide(activeIndex + 1);
+        }
+    });
+
+    showSlide(activeIndex);
+}
+
+// Flickering flame that sits above the projects title
+function initFlame() {
     const section = document.querySelector('#projects');
     if (!section) return;
 
-    const rocket = document.createElement('div');
-    rocket.className = 'rocket';
-    rocket.setAttribute('aria-hidden', 'true');
-    rocket.innerHTML = `
-        <svg viewBox="0 0 70 140">
-            <g class="rocket-cloud" fill="#f4f6fa">
-                <circle cx="35" cy="102" r="14"/>
-                <circle cx="20" cy="112" r="11"/>
-                <circle cx="50" cy="112" r="11"/>
-                <circle cx="35" cy="124" r="12"/>
-                <circle cx="26" cy="132" r="8"/>
-                <circle cx="44" cy="132" r="8"/>
-            </g>
-            <path d="M35 0 C52 16 54 46 50 78 L20 78 C16 46 18 16 35 0 Z" fill="#f4f6fa"/>
-            <path d="M20 58 L6 88 L22 80 Z M50 58 L64 88 L48 80 Z" fill="#f05a5a"/>
-            <path d="M35 0 C44 8 48 16 50 26 L20 26 C22 16 26 8 35 0 Z" fill="#f05a5a"/>
-            <circle cx="35" cy="46" r="8" fill="#2b3a55" stroke="#d94a4a" stroke-width="3"/>
-            <path d="M26 78 L44 78 L40 90 L30 90 Z" fill="#d94a4a"/>
+    const flame = document.createElement('div');
+    flame.className = 'flame';
+    flame.setAttribute('aria-hidden', 'true');
+    flame.innerHTML = `
+        <svg viewBox="0 0 60 80" preserveAspectRatio="none">
+            <path class="flame-outer" d="M30 2 C34 18 52 28 52 50 C52 66 42 78 30 78 C18 78 8 66 8 50 C8 40 14 33 18 26 C20 34 24 36 26 36 C24 24 26 12 30 2 Z" fill="#f05a5a"/>
+            <path class="flame-mid" d="M30 24 C33 34 44 42 44 55 C44 67 38 75 30 75 C22 75 16 67 16 55 C16 48 20 44 23 40 C25 45 27 46 28 46 C27 38 28 30 30 24 Z" fill="#ff9a3c"/>
+            <path class="flame-core" d="M30 46 C32 52 38 56 38 63 C38 70 34 74 30 74 C26 74 22 70 22 63 C22 58 26 55 27 52 C28 54 29 54 29 54 C29 51 29 48 30 46 Z" fill="#ffe27a"/>
         </svg>`;
-    section.appendChild(rocket);
-
-    const swings = 5;
-    const position = (p) => {
-        const w = section.clientWidth;
-        const h = section.clientHeight;
-        const row = section.querySelector('.project-row');
-        const amp = row ? row.offsetWidth / 2 + 45 : Math.min(w * 0.42, 600);
-        const phase = p * swings * Math.PI;
-        return {
-            x: Math.min(w - 32, Math.max(0, w / 2 + amp * Math.sin(phase) - 16)),
-            y: p * h,
-            dx: amp * swings * Math.PI * Math.cos(phase),
-            dy: h
-        };
-    };
-
-    const update = () => {
-        const rect = section.getBoundingClientRect();
-        const p = Math.min(1, Math.max(0, (window.innerHeight * 0.4 - rect.top) / rect.height));
-        const pos = position(p);
-        const angle = Math.atan2(pos.dx, -pos.dy) * 180 / Math.PI;
-        rocket.style.transform = `translate(${pos.x}px, ${pos.y - 32}px) rotate(${angle}deg)`;
-        rocket.style.opacity = rect.top < window.innerHeight && rect.bottom > 0 ? '1' : '0';
-    };
-
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+    const title = section.querySelector('.container > h2');
+    if (title) title.before(flame);
 }
 
 // Add some subtle animations on page load
@@ -513,7 +585,8 @@ window.addEventListener('load', function() {
     heroContent.style.transform = 'translateY(20px)';
     
     initPolaroids();
-    initRocket();
+    initProjectSlideshow();
+    initFlame();
 
     // Create particles
     createParticles();
